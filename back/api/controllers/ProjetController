@@ -1,0 +1,142 @@
+using System.Xml.Serialization;
+using api.Data;
+using api.Dtos.Projet;
+using api.Mappers;
+using api.Models;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
+
+namespace api.Controllers
+{
+    [Route("api/Projet")]
+    [ApiController]
+    public class ProjetController : ControllerBase
+    {
+        private readonly ApplicationDBContext _context;
+        public ProjetController(ApplicationDBContext context)
+        {
+            _context = context;
+        }
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            var Projets = _context.Projets.ToList()
+             .Select(s => s.ToProjetDto());
+
+            return Ok(Projets);
+        }
+        [HttpGet("{id}")]
+        public IActionResult GetById([FromRoute] int id)
+        {
+            var Projet = _context.Projets.Find(id);
+
+            if (Projet == null)
+            {
+                return NotFound();
+            }
+            return Ok(Projet.ToProjetDto());
+        }
+        [HttpPost]
+        public IActionResult Create([FromBody] CreateProjetRequestDto projetDto)
+        {
+            var projetModel = projetDto.ToProjetFromCreateDTO();
+            _context.Projets.Add(projetModel);
+            _context.SaveChanges();
+            return CreatedAtAction(nameof(GetById), new { id = projetModel.Id }, projetModel.ToProjetDto());
+        }
+        [HttpPut]
+        [Route("{id}")]
+        public IActionResult update([FromRoute] int id, [FromBody] UpdateProjetRequestDto updateDto)
+        {
+            var projetModel = _context.Projets.FirstOrDefault(x => x.Id == id);
+            if (projetModel == null)
+            {
+                return NotFound();
+            }
+            projetModel.Membre = updateDto.Membre;
+            projetModel.Titre = updateDto.Titre;
+            projetModel.Description = updateDto.Description;
+            projetModel.Statut = updateDto.Statut;
+            projetModel.Date_creation = updateDto.Date_creation;
+
+            _context.SaveChanges();
+
+            return Ok(projetModel.ToProjetDto());
+
+        }
+
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> Patch(int id, [FromBody] JsonPatchDocument<UpdateProjetRequestDto> patchDoc)
+        {
+            if (patchDoc == null)
+            {
+                return BadRequest("Patch document is required");
+            }
+
+            // find existing project
+            var projet = await _context.Projets.FindAsync(id);
+            if (projet == null)
+            {
+                return NotFound();
+            }
+
+            // map entity -> DTO
+            var projetToPatch = new UpdateProjetRequestDto
+            {
+                Membre = projet.Membre,
+                Titre = projet.Titre,
+                Description = projet.Description,
+                Statut = projet.Statut,
+                Date_creation = projet.Date_creation
+            };
+
+            // apply patch to DTO
+            try
+            {
+                patchDoc.ApplyTo(projetToPatch, ModelState);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Invalid patch operation: {ex.Message}");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            // Validate the patched model
+            if (!TryValidateModel(projetToPatch))
+            {
+                return BadRequest(ModelState);
+            }
+
+            // update entity with patched values
+            projet.Membre = projetToPatch.Membre;
+            projet.Titre = projetToPatch.Titre;
+            projet.Description = projetToPatch.Description;
+            projet.Statut = projetToPatch.Statut;
+            projet.Date_creation = projetToPatch.Date_creation;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(projet.ToProjetDto());
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public IActionResult Delete([FromRoute] int id)
+        {
+            var projetModel = _context.Projets.FirstOrDefault(x => x.Id == id);
+
+            if (projetModel == null)
+            {
+                return NotFound();
+            }
+            _context.Projets.Remove(projetModel);
+            _context.SaveChanges();
+
+            return NoContent();
+        }
+    }
+}
