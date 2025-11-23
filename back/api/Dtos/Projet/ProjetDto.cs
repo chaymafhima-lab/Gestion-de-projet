@@ -1,0 +1,13 @@
+namespace api.Dtos.Projet
+{
+    public class ProjetDto
+    {
+        public int Id { get; set; }
+        public int Membre { get; set; }
+        public string Titre { get; set; } = string.Empty;
+
+        public string Description { get; set; } = string.Empty;
+        public string Statut { get; set; } = string.Empty;
+        public DateTime Date_creation { get; set; }
+    }
+}
