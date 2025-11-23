@@ -1,0 +1,90 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f8f9fa;
+  margin: 0;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.modal {
+  background: white;
+  padding: 20px;
+  border-radius: 6px;
+  width: 400px;
+}
+.form-group {
+  margin-bottom: 15px;
+}
+.form-group label {
+  display: block;
+  font-weight: bold;
+}
+input, select, textarea {
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+textarea {
+  resize: vertical;
+}
+.methodology-options label {
+  display: block;
+  margin-top: 5px;
+}
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.btn {
+  padding: 8px 12px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+.btn.primary {
+  background: #0d6efd;
+  color: white;
+}
+.btn.cancel {
+  background: #ccc;
+}
+.btn-small {
+  padding: 4px 8px;
+  border: none;
+  cursor: pointer;
+}
+
+/* Table */
+.user-management {
+  padding: 20px;
+}
+.search {
+  margin-bottom: 10px;
+  padding: 8px;
+  width: 300px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+th, td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+th {
+  background: #f1f1f1;
+}
