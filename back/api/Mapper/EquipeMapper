@@ -1,0 +1,33 @@
+using System.ComponentModel.DataAnnotations;
+using api.Dtos.Equipe;
+using api.Models;
+using Microsoft.AspNetCore.Identity;
+
+namespace api.Mappers
+{
+    public static class EquipeMapper
+    {
+        public static EquipeDto ToEquipeDto(this Equipe equipeModel)
+        {
+            return new EquipeDto
+            {
+                Id = equipeModel.Id,
+                Titre = equipeModel.Titre,
+                Description = equipeModel.Description,
+                Date_creation = equipeModel.Date_creation
+
+
+
+            };
+        }
+        public static Equipe ToEquipeFromCreateDTO(this CreateEquipeRequestDto equipeDto)
+        {
+            return new Equipe
+            {
+                Titre = equipeDto.Titre,
+                Description = equipeDto.Description,
+                Date_creation = equipeDto.Date_creation
+            };
+        }
+    }
+}
