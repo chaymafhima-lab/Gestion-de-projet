@@ -1,0 +1,259 @@
+/* 🌐 Fond général */
+.page-container {
+  max-width: 1000px;
+  margin: auto;
+  padding: 20px;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+/* 🏷️ En-tête */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+
+}
+
+.header h1 {
+  font-size: 28px;
+  font-weight: bold;
+  color: #002b5b;
+}
+
+/* ➕ Bouton Créer une équipe */
+.btn-create {
+  background: linear-gradient(90deg, #021e4e, #066396f5);
+  display: inline-block;
+  padding: 12px 25px;
+  border-radius: 6px;
+  color: white;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.btn-create:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* 📦 Carte équipe */
+.teams-list {
+  margin-top: 20px;
+  display: grid;
+  gap: 15px;
+}
+
+.team-card {
+  background: #fff;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+}
+
+.team-card h3 {
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0 0 4px;
+}
+
+.team-card p {
+  font-size: 14px;
+  color: #555;
+  margin: 0;
+}
+
+/* 🖼️ Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-container {
+  background: white;
+  border-radius: 12px;
+  width: 420px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+.modal-container input,
+.modal-container select,
+.modal-container textarea {
+  width: 100%;
+  height: 42px;             /* ✅ même hauteur pour tous les inputs/select */
+  margin-bottom: 12px;      /* ✅ espace régulier entre les champs */
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  box-sizing: border-box;
+  outline: none;
+  background: #fafafa;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+.modal-container input:focus,
+.modal-container select:focus,
+.modal-container textarea:focus {
+  border-color: #066396;
+  box-shadow: 0 0 4px rgba(6, 99, 150, 0.3);
+  background: #fff;
+}
+
+/* ✅ textarea spécifique */
+.modal-container textarea {
+  min-height: 90px;
+  height: auto;  /* grandit si texte long */
+  resize: vertical;
+}
+
+/* En-tête du modal */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h2 {
+  font-size: 18px;
+  font-weight: bold;
+  color: #002b5b;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #666;
+}
+
+.close-btn:hover {
+  color: black;
+}
+
+/* Champs du formulaire */
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 6px;
+  color: #002b5b;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.form-group textarea {
+  resize: none;
+  height: 70px;
+}
+
+/* 🎨 Sélecteur de couleurs */
+.color-picker {
+  display: flex;
+  gap: 10px;
+}
+
+.color-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+
+.color-circle.selected {
+  border-color: black;
+}
+
+/* Boutons du modal */
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.btn-cancel {
+  background: #f3f3f3;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-cancel:hover {
+  background: #e5e5e5;
+}
+
+.btn-submit {
+  background: linear-gradient(90deg, #021e4e, #066396f5);
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-submit:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+.color-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.color-circle {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+.color-circle.selected {
+  border: 2px solid black;
+}
+.btn-delete {
+  background-color: #d1cfcf;
+  color: black;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 8px;
+}
+.btn-delete:hover {
+  background-color: #dc2626;
+  color: white;
+}
+
+.card-actions {
+  margin-top: 10px;
+}
