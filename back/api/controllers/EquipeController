@@ -1,0 +1,135 @@
+using System.Xml.Serialization;
+using api.Data;
+using api.Dtos.Equipe;
+using api.Mappers;
+using api.Models;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
+
+namespace api.Controllers
+{
+    [Route("api/Equipe")]
+    [ApiController]
+    public class EquipeController : ControllerBase
+    {
+        private readonly ApplicationDBContext _context;
+        public EquipeController(ApplicationDBContext context)
+        {
+            _context = context;
+        }
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            var Equipes = _context.Equipes.ToList()
+             .Select(s => s.ToEquipeDto());
+
+            return Ok(Equipes);
+        }
+        [HttpGet("{id}")]
+        public IActionResult GetById([FromRoute] int id)
+        {
+            var Equipe = _context.Equipes.Find(id);
+
+            if (Equipe == null)
+            {
+                return NotFound();
+            }
+            return Ok(Equipe.ToEquipeDto());
+        }
+        [HttpPost]
+        public IActionResult Create([FromBody] CreateEquipeRequestDto equipeDto)
+        {
+            var equipeModel = equipeDto.ToEquipeFromCreateDTO();
+            _context.Equipes.Add(equipeModel);
+            _context.SaveChanges();
+            return CreatedAtAction(nameof(GetById), new { id = equipeModel.Id }, equipeModel.ToEquipeDto());
+        }
+        [HttpPut]
+        [Route("{id}")]
+        public IActionResult update([FromRoute] int id, [FromBody] UpdateEquipeRequestDto updateDto)
+        {
+            var equipeModel = _context.Equipes.FirstOrDefault(x => x.Id == id);
+            if (equipeModel == null)
+            {
+                return NotFound();
+            }
+            equipeModel.Titre = updateDto.Titre;
+            equipeModel.Description = updateDto.Description;
+            equipeModel.Date_creation = updateDto.Date_creation;
+
+            _context.SaveChanges();
+
+            return Ok(equipeModel.ToEquipeDto());
+
+        }
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> Patch(int id, [FromBody] JsonPatchDocument<UpdateEquipeRequestDto> patchDoc)
+        {
+            if (patchDoc == null)
+            {
+                return BadRequest("Patch document is required");
+            }
+
+            // find existing project
+            var equipe = await _context.Equipes.FindAsync(id);
+            if (equipe == null)
+            {
+                return NotFound();
+            }
+
+            // map entity -> DTO
+            var equipeToPatch = new UpdateEquipeRequestDto
+            {
+                Titre = equipe.Titre,
+                Description = equipe.Description,
+                Date_creation = equipe.Date_creation
+            };
+
+            // apply patch to DTO
+            try
+            {
+                patchDoc.ApplyTo(equipeToPatch, ModelState);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Invalid patch operation: {ex.Message}");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            // Validate the patched model
+            if (!TryValidateModel(equipeToPatch))
+            {
+                return BadRequest(ModelState);
+            }
+
+            // update entity with patched values
+            equipe.Titre = equipeToPatch.Titre;
+            equipe.Description = equipeToPatch.Description;
+            equipe.Date_creation = equipeToPatch.Date_creation;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(equipe.ToEquipeDto());
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public IActionResult Delete([FromRoute] int id)
+        {
+            var equipeModel = _context.Equipes.FirstOrDefault(x => x.Id == id);
+
+            if (equipeModel == null)
+            {
+                return NotFound();
+            }
+            _context.Equipes.Remove(equipeModel);
+            _context.SaveChanges();
+
+            return NoContent();
+        }
+    }
+}
