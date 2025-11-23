@@ -1,0 +1,19 @@
+using Microsoft.EntityFrameworkCore;
+using api.Models;
+namespace api.Data
+{
+    public class ApplicationDBContext : DbContext
+    {
+        public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options)
+            : base(options)
+        {
+        }
+
+
+        // Exemple : table Equipes
+        public DbSet<Equipe> Equipes { get; set; }
+        public DbSet<Projet> Projets { get; set; }
+        public DbSet<Tache> Taches { get; set; }
+        public DbSet<Utilisateur> Utilisateurs { get; set; }
+    }
+}
